@@ -11,5 +11,13 @@ type CellType string
 type Cell struct {
 	ID     int
 	Type   CellType
-	Reward int
+	Reward float32
+}
+
+func NewCell(id int, cellType CellType, reward float32) Cell {
+	return Cell{
+		ID:     id,
+		Type:   cellType,
+		Reward: reward,
+	}
 }

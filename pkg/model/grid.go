@@ -1,7 +1,7 @@
 package model
 
 type Grid struct {
-	Cells []Cell
+	Cells [][]Cell
 	Policy
 	Agent
 }
