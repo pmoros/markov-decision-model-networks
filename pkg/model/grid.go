@@ -1,6 +1,7 @@
 package model
 
-type Policy map[int]Direction
-
 type Grid struct {
+	Cells []Cell
+	Policy
+	Agent
 }
