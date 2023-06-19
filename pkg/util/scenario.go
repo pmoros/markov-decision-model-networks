@@ -1,6 +1,8 @@
 package util
 
-import "github.com/pmoros/markov-decision-model-networks/pkg/model"
+import (
+	"github.com/pmoros/markov-decision-model-networks/pkg/model"
+)
 
 func CreateScenario() model.Grid {
 	return model.Grid{
@@ -36,6 +38,20 @@ func CreateScenario() model.Grid {
 				model.RotateRight: 0.1,
 				model.Back:        0.0, // no back movements on this example
 			},
+			InitialCell: model.Coords{0, 2},
 		},
 	}
+}
+
+func RunScenario(grid model.Grid) {
+	// as long as the agent is not on a goal
+	grid.Agent.CurrentCell = grid.Agent.InitialCell
+
+	for model.GetCellFromCoords(grid.Agent.CurrentCell, grid).Type == model.Goal {
+		intendedMovement := model.GetPolicyDirectionFromCoords(grid.Agent.CurrentCell, grid.Policy)
+	}
+}
+
+func calculateNextMovement(agent model.Agent, grid model.Grid, policy model.Policy) model.Direction {
+
 }
