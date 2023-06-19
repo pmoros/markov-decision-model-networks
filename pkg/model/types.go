@@ -14,8 +14,8 @@ func GetPolicyDirectionFromCoords(coords Coords, policy Policy) *Direction {
 		return nil
 	}
 
-	for hCoord, row := range policy {
-		for vCoord, cell := range row {
+	for vCoord, row := range policy {
+		for hCoord, cell := range row {
 			if coords[0] == hCoord && coords[1] == vCoord {
 				return &cell
 			}
