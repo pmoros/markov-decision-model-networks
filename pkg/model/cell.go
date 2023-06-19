@@ -13,10 +13,10 @@ type CellType string
 type Cell struct {
 	ID     int
 	Type   CellType
-	Reward float32
+	Reward float64
 }
 
-func NewCell(id int, cellType CellType, reward float32) Cell {
+func NewCell(id int, cellType CellType, reward float64) Cell {
 	return Cell{
 		ID:     id,
 		Type:   cellType,
@@ -30,8 +30,8 @@ func GetCellFromCoords(coords Coords, grid Grid) *Cell {
 		return nil
 	}
 
-	for hCoord, row := range grid.Cells {
-		for vCoord, cell := range row {
+	for vCoord, row := range grid.Cells {
+		for hCoord, cell := range row {
 			if coords[0] == hCoord && coords[1] == vCoord {
 				return &cell
 			}
