@@ -8,4 +8,5 @@ import (
 func main() {
 	fmt.Println("MDP")
 	scenarioGrid := util.CreateScenario()
+	util.RunScenario(scenarioGrid)
 }
