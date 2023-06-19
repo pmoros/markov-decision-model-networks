@@ -4,6 +4,14 @@ import "fmt"
 
 type Probability float32
 
+type PolicyType int
+
+const (
+	Fixed PolicyType = iota
+	Randomized
+	Iterated
+)
+
 type Policy [][]Direction
 
 type Coords []int

@@ -2,12 +2,14 @@ package util
 
 import (
 	"fmt"
-	"github.com/pmoros/markov-decision-model-networks/pkg/model"
 	"math/rand"
 	"time"
+
+	"github.com/pmoros/markov-decision-model-networks/pkg/model"
+	"github.com/pmoros/markov-decision-model-networks/pkg/policy"
 )
 
-func CreateScenario() model.Grid {
+func CreateScenario(policyType model.PolicyType) model.Grid {
 	return model.Grid{
 		Cells: [][]model.Cell{
 			{
@@ -29,11 +31,7 @@ func CreateScenario() model.Grid {
 				model.NewCell(11, model.Clear, -0.04),
 			},
 		},
-		Policy: model.Policy{
-			{model.Right, model.Right, model.Left, model.Idle},
-			{model.Up, model.Idle, model.Down, model.Idle},
-			{model.Right, model.Down, model.Right, model.Up},
-		},
+		Policy: policy.GeneratePolicy(policyType),
 		Agent: model.Agent{
 			TransitionModel: model.Transition{
 				model.Forward:     0.8,
