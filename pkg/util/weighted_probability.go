@@ -1,44 +1,20 @@
 package util
 
 import (
-	"fmt"
-	"math/rand"
+	"github.com/pmoros/markov-decision-model-networks/pkg/model"
 )
 
-func sample(cdf []float32) int {
-	r := rand.Float32()
+func GetWeightedArray(transition model.Transition) []model.Movement {
+	weightedArray := make([]model.Movement, 100)
+	sampleCounter := 0
 
-	bucket := 0
-	for r > cdf[bucket] {
-		bucket++
-	}
-	return bucket
-}
+	for movement, prob := range transition {
+		numberOfSamples := int(prob * 100)
 
-func main() {
-	// probability density function
-	pdf := []float32{0.3, 0.4, 0.2, 0.1}
-
-	// get cdf
-	cdf := []float32{0.0, 0.0, 0.0, 0.0}
-	cdf[0] = pdf[0]
-	for i := 1; i < 4; i++ {
-		cdf[i] = cdf[i-1] + pdf[i]
+		for ; sampleCounter < numberOfSamples; sampleCounter++ {
+			weightedArray[sampleCounter] = movement
+		}
 	}
 
-	// test sampling with 100 samples
-	samples := []float32{0.0, 0.0, 0.0, 0.0}
-
-	for i := 0; i < 100; i++ {
-		samples[sample(cdf)]++
-	}
-
-	// normalize
-	for i := 0; i < 4; i++ {
-		samples[i] /= 100.
-	}
-
-	fmt.Println(samples)
-	fmt.Println(pdf)
-
+	return weightedArray
 }
