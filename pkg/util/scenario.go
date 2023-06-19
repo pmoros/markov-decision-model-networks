@@ -1,51 +1,22 @@
 package util
 
 import (
-	"fmt"
 	"math/rand"
 	"time"
 
 	"github.com/pmoros/markov-decision-model-networks/pkg/model"
-	"github.com/pmoros/markov-decision-model-networks/pkg/policy"
 )
 
-func CreateScenario(policyType model.PolicyType) model.Grid {
+func CreateScenario(cells [][]model.Cell, policy model.Policy, agent model.Agent) model.Grid {
 	return model.Grid{
-		Cells: [][]model.Cell{
-			{
-				model.NewCell(0, model.Clear, -0.04),
-				model.NewCell(1, model.Clear, -0.04),
-				model.NewCell(2, model.Clear, -0.04),
-				model.NewCell(3, model.Goal, 1.0),
-			},
-			{
-				model.NewCell(4, model.Clear, -0.04),
-				model.NewCell(5, model.Blocked, 0),
-				model.NewCell(6, model.Clear, -0.04),
-				model.NewCell(7, model.Goal, -1.0),
-			},
-			{
-				model.NewCell(8, model.Clear, -0.04),
-				model.NewCell(9, model.Clear, -0.04),
-				model.NewCell(10, model.Clear, -0.04),
-				model.NewCell(11, model.Clear, -0.04),
-			},
-		},
-		Policy: policy.GeneratePolicy(policyType),
-		Agent: model.Agent{
-			TransitionModel: model.Transition{
-				model.Forward:     0.8,
-				model.RotateLeft:  0.1,
-				model.RotateRight: 0.1,
-				model.Back:        0.0, // no back movements on this example
-			},
-			InitialCell: model.Coords{0, 2},
-			Energy:      0,
-		},
+		Cells:  cells,
+		Policy: policy,
+		Agent:  agent,
 	}
 }
 
-func RunScenario(grid model.Grid) {
+func RunScenario(grid model.Grid) float64 {
+	// TODO: info should be logged to different output
 	// set initial position for agent
 	grid.Agent.CurrentCell = grid.Agent.InitialCell
 
@@ -57,9 +28,9 @@ func RunScenario(grid model.Grid) {
 		// then calculate the final direction with the stochastic transition model
 		nextDirection := calculateNextStochasticMovement(intendedMovement, grid.Agent.TransitionModel)
 
-		fmt.Printf("Current cell is %d and movement is %d\n",
-			model.GetCellFromCoords(grid.Agent.CurrentCell, grid).ID,
-			nextDirection)
+		// fmt.Printf("Current cell is %d and movement is %d\n",
+		// 	model.GetCellFromCoords(grid.Agent.CurrentCell, grid).ID,
+		// 	nextDirection)
 
 		// deduct energy from agent
 		grid.Agent.Energy += model.GetCellFromCoords(grid.Agent.CurrentCell, grid).Reward
@@ -68,11 +39,12 @@ func RunScenario(grid model.Grid) {
 		grid.Agent.CurrentCell = moveAgent(grid.Agent.CurrentCell, nextDirection, grid)
 	}
 
-	fmt.Printf("Final cell is %d\n",
-		model.GetCellFromCoords(grid.Agent.CurrentCell, grid).ID)
+	// fmt.Printf("Final cell is %d\n",
+	// 	model.GetCellFromCoords(grid.Agent.CurrentCell, grid).ID)
 
 	// when simulation is done
-	fmt.Println(grid.Agent)
+	// fmt.Println(grid.Agent)
+	return grid.Agent.Energy
 }
 
 func calculateNextStochasticMovement(intendedMovement *model.Direction, transitionModel model.Transition) model.Direction {
