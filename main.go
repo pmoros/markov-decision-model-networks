@@ -42,7 +42,6 @@ func main() {
 	for i := 0; i < *timesToRunFlag; i++ {
 		go func() {
 			// policyType := model.Fixed // model.Fixed, model.Randomized or model.Iterated
-			policy := policy.GeneratePolicy(policyType)
 			cells := [][]model.Cell{
 				{
 					model.NewCell(0, model.Clear, -0.04),
@@ -72,6 +71,14 @@ func main() {
 				},
 				InitialCell: model.Coords{0, 2},
 				Energy:      0,
+			}	
+					
+			if policyType == model.Iterated {
+				policyAux := policy.GeneratePolicy(model.Fixed)
+				policy := policy.GenerateIteratedPolicy(cells, agent, policyAux)
+			}
+			else {
+				policy := policy.GeneratePolicy(policyType)
 			}
 
 			scenarioGrid := util.CreateScenario(cells, policy, agent)

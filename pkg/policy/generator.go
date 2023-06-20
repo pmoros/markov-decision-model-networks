@@ -12,8 +12,6 @@ func GeneratePolicy(policyType model.PolicyType) model.Policy {
 		return GenerateFixedPolicy()
 	case model.Randomized:
 		return GenerateRandomizedPolicy()
-	case model.Iterated:
-		return GenerateIteratedPolicy()
 	default:
 		return nil
 	}
@@ -45,10 +43,15 @@ func GenerateRandomizedPolicy() model.Policy {
 	return policy
 }
 
-func GenerateIteratedPolicy() model.Policy {
-	return model.Policy{
-		{model.Right, model.Right, model.Left, model.Idle},
-		{model.Up, model.Idle, model.Down, model.Idle},
-		{model.Right, model.Down, model.Right, model.Up},
+func GenerateIteratedPolicy(cells [][]model.Cell, agent model.Agent, policy model.Policy) model.Policy {
+	mdp := MDP{
+		Policy:     policy,
+		Cells:      cells,
+		Agent:      agent,
+		Discount:   0.9,
+		Iterations: 100,
 	}
+
+	return PolicyIteration(mdp)
+
 }
