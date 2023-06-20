@@ -71,21 +71,21 @@ func main() {
 				},
 				InitialCell: model.Coords{0, 2},
 				Energy:      0,
-			}	
-					
-			if policyType == model.Iterated {
-				policyAux := policy.GeneratePolicy(model.Fixed)
-				policy := policy.GenerateIteratedPolicy(cells, agent, policyAux)
-			}
-			else {
-				policy := policy.GeneratePolicy(policyType)
 			}
 
-			scenarioGrid := util.CreateScenario(cells, policy, agent)
+			policyModel := model.Policy{}
+			if policyType == model.Iterated {
+				policyAux := policy.GeneratePolicy(model.Fixed)
+				policyModel = policy.GenerateIteratedPolicy(cells, agent, policyAux)
+			} else {
+				policyModel = policy.GeneratePolicy(policyType)
+			}
+
+			scenarioGrid := util.CreateScenario(cells, policyModel, agent)
 			energyLevel := util.RunScenario(scenarioGrid)
 
 			if *showPolicyFlag {
-				fmt.Println(policy)
+				fmt.Println(policyModel)
 			}
 			fmt.Println(energyLevel)
 
